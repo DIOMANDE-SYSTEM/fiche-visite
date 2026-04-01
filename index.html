@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de Visite Technique — CDP Projet Compétences</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --blue: #1B4F8A;
+    --blue-mid: #2E75B6;
+    --blue-light: #C8DDF5;
+    --gold: #C9913A;
+    --gold-light: #F5E4C3;
+    --cream: #F8F5F0;
+    --white: #FFFFFF;
+    --grey: #6B7280;
+    --red: #DC2626;
+    --green: #16A34A;
+    --border: #D1D5DB;
+    --shadow: 0 2px 12px rgba(13,27,42,0.10);
+    --shadow-lg: 0 8px 32px rgba(13,27,42,0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: var(--navy);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-badge {
+    background: var(--gold);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--white);
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .header-title span { color: var(--gold); }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .progress-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .progress-label { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .progress-bar { width: 160px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.3s; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* ── HERO BAND ── */
+  .hero {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--navy) 100%);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: var(--shadow-lg);
+  }
+  .hero-text h1 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--white);
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .hero-text p { color: rgba(255,255,255,0.65); font-size: 13px; line-height: 1.6; }
+  .hero-meta {
+    display: flex;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 12px 20px;
+    text-align: center;
+    color: var(--white);
+  }
+  .meta-pill .num { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--gold); display: block; }
+  .meta-pill .lbl { font-size: 11px; opacity: 0.7; white-space: nowrap; }
+
+  /* ── TABS ── */
+  .tabs-nav {
+    display: flex;
+    gap: 0;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--grey);
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .tab-btn.active {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .tab-btn .tab-num {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tab-btn:not(.active) .tab-num {
+    background: var(--blue-light);
+    color: var(--blue);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .card-header {
+    background: var(--navy);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .card-title { color: var(--white); font-weight: 600; font-size: 15px; }
+  .card-subtitle { color: rgba(255,255,255,0.55); font-size: 12px; margin-top: 2px; }
+  .card-body { padding: 24px; }
+
+  /* ── FORM ELEMENTS ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 12px; font-weight: 600; color: var(--grey); letter-spacing: 0.5px; text-transform: uppercase; }
+  input[type=text], input[type=date], input[type=tel], select, textarea {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--blue-mid);
+    box-shadow: 0 0 0 3px rgba(46,117,182,0.12);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* DRENA pills */
+  .drena-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .drena-pill input { display: none; }
+  .drena-pill label {
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 9px 20px;
+    border-radius: 50px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--grey);
+    transition: all 0.2s;
+    background: var(--white);
+  }
+  .drena-pill input:checked + label {
+    border-color: var(--blue);
+    background: var(--blue);
+    color: var(--white);
+  }
+
+  /* ── CONSTATS TABLE ── */
+  .constats-table { width: 100%; border-collapse: collapse; }
+  .constats-table thead th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 11px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .constats-table tbody tr { border-bottom: 1px solid #EEF0F4; transition: background 0.15s; }
+  .constats-table tbody tr:hover { background: #F8FAFF; }
+  .constats-table tbody tr.has-issue { background: #FFF8F0; }
+  .constats-table td { padding: 12px 14px; vertical-align: top; font-size: 14px; }
+  .constat-num {
+    font-family: 'DM Serif Display', serif;
+    color: var(--blue-mid);
+    font-size: 16px;
+    font-weight: 700;
+    width: 36px;
+    text-align: center;
+  }
+  .constat-label { font-weight: 500; color: var(--navy); }
+  .constat-label small { display: block; color: var(--grey); font-size: 12px; margin-top: 3px; font-weight: 400; }
+
+  /* OUI/NON toggle */
+  .toggle-group { display: flex; gap: 6px; align-items: center; }
+  .toggle-group input { display: none; }
+  .toggle-group label {
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--grey);
+    transition: all 0.2s;
+    background: var(--white);
+  }
+  .toggle-oui input:checked + label { border-color: var(--red); background: var(--red); color: white; }
+  .toggle-non input:checked + label { border-color: var(--green); background: var(--green); color: white; }
+
+  /* Expandable desc */
+  .desc-expand { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+  .desc-expand.open { max-height: 200px; }
+  .desc-expand textarea { margin-top: 8px; }
+
+  /* ── BADGE STATUS ── */
+  .status-summary {
+    display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .status-badge {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .badge-issue { background: #FEF2F2; color: var(--red); }
+  .badge-ok { background: #F0FDF4; color: var(--green); }
+  .badge-pending { background: #FFF7ED; color: #C2410C; }
+
+  /* ── AUTRES CONSTATS ── */
+  .autres-row {
+    background: #F8F9FB;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .autres-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .autres-title { font-weight: 600; font-size: 14px; color: var(--blue); }
+  .btn-remove { background: none; border: none; color: var(--grey); cursor: pointer; font-size: 18px; line-height: 1; }
+  .btn-add {
+    border: 2px dashed var(--blue-mid);
+    background: transparent;
+    color: var(--blue-mid);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+  }
+  .btn-add:hover { background: var(--blue-light); }
+
+  /* ── ETABLISSEMENTS MULTIPLES ── */
+  .etab-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .etab-tab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--grey);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .etab-tab.active { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+  .etab-tab .etab-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .etab-tab.active .etab-dot { background: var(--blue); }
+  .btn-add-etab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px dashed var(--blue-mid);
+    background: transparent;
+    color: var(--blue-mid);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-add-etab:hover { background: var(--blue-light); }
+
+  /* ── GENERATE BTN ── */
+  .generate-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    z-index: 100;
+  }
+  .generate-info { font-size: 13px; color: var(--grey); }
+  .generate-info strong { color: var(--navy); }
+  .btn-generate {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--navy) 100%);
+    color: var(--white);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(27,79,138,0.35);
+  }
+  .btn-generate:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(27,79,138,0.45); }
+  .btn-generate:active { transform: translateY(0); }
+
+  /* ── TAB PANELS ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SIGNATURES ── */
+  .sig-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .sig-box {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .sig-box-header {
+    background: var(--blue-light);
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .sig-box-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .sig-line {
+    border-bottom: 1.5px solid var(--border);
+    padding-bottom: 30px;
+    font-size: 12px;
+    color: var(--grey);
+  }
+
+  /* ── SUMMARY ── */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .summary-item {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .summary-item .s-label { font-size: 11px; color: var(--grey); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .summary-item .s-value { font-size: 15px; font-weight: 700; color: var(--navy); }
+
+  @media (max-width: 768px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid.cols3 { grid-template-columns: 1fr 1fr; }
+    .sig-grid { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .hero-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-badge">DCEP</div>
+      <div class="header-title">
+        Projet Compétences – MCA-CI<br>
+        <span>Réception définitive des CDP</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="progress-wrap">
+        <div class="progress-label">Complétude du formulaire</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Fiche de Visite Technique Préalable<br>à la Réception Définitive des CDP</h1>
+      <p>Mission conjointe et contradictoire post-réception provisoire · Région de Bouaké<br>
+      Période : 22 février – 01 mars 2026 · DRENAET Bouaké 1 (14 collèges)</p>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-pill">
+        <span class="num">40</span>
+        <span class="lbl">CDP construits</span>
+      </div>
+      <div class="meta-pill">
+        <span class="num">13</span>
+        <span class="lbl">Constats vérifiés</span>
+      </div>
+      <div class="meta-pill">
+        <span class="num" id="nbEtab">1</span>
+        <span class="lbl">Étab. ce jour</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS NAV -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('identification')">
+      🗂️ Identification <span class="tab-num">1</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('constats')">
+      🔍 Constats <span class="tab-num" id="tabConstatsNum">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('observations')">
+      📝 Observations <span class="tab-num">3</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('reserves')">
+      ⚠️ Réserves <span class="tab-num" id="tabReservesNum">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('signatures')">
+      ✍️ Signatures <span class="tab-num">4</span>
+    </button>
+  </div>
+
+  <!-- ÉTABLISSEMENTS SELECTOR -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏫</div>
+      <div>
+        <div class="card-title">Établissements visités ce jour</div>
+        <div class="card-subtitle">Vous pouvez ajouter plusieurs établissements visités dans la même journée</div>
+      </div>
+    </div>
+    <div class="card-body" style="padding-bottom:16px;">
+      <div class="etab-tabs" id="etabTabs">
+        <div class="etab-tab active" data-etab="0" onclick="switchEtab(0)">
+          <div class="etab-dot"></div>
+          <span>Établissement 1</span>
+        </div>
+        <button class="btn-add-etab" onclick="addEtab()">＋ Ajouter un établissement</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: IDENTIFICATION -->
+  <div id="tab-identification" class="tab-panel active">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <div>
+          <div class="card-title">Informations générales de la visite</div>
+          <div class="card-subtitle">Établissement <span id="etabLabel">1</span></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-grid cols3" style="margin-bottom:20px;">
+          <div class="form-group">
+            <label>Date de la visite *</label>
+            <input type="date" id="dateVisite" onchange="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label>N° Rapport</label>
+            <input type="text" id="numRapport" placeholder="ex: 001/2026" onchange="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label>Heure de visite</label>
+            <input type="text" id="heureVisite" placeholder="ex: 09h00">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>DRENA *</label>
+          <div class="drena-group">
+            <div class="drena-pill">
+              <input type="radio" name="drena" id="drena1" value="Bouaké 1" onchange="updateProgress()">
+              <label for="drena1">DRENAET Bouaké 1</label>
+            </div>
+            <div class="drena-pill">
+              <input type="radio" name="drena" id="drena2" value="Bouaké 2" onchange="updateProgress()">
+              <label for="drena2">DRENAET Bouaké 2</label>
+            </div>
+            <div class="drena-pill">
+              <input type="radio" name="drena" id="drena3" value="San Pédro" onchange="updateProgress()">
+              <label for="drena3">DRENAET San Pédro</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="form-group">
+            <label>Nom du collège *</label>
+            <input type="text" class="f-college" placeholder="ex: C. Moderne d'Akadiafoué" onchange="updateProgress(); updateEtabLabel()">
+          </div>
+          <div class="form-group">
+            <label>Type de base</label>
+            <select class="f-base">
+              <option value="">Sélectionner...</option>
+              <option>Base 2</option>
+              <option>Base 4</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nom du Chef d'Établissement *</label>
+            <input type="text" class="f-chef" placeholder="Nom et prénom" onchange="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label>Contacts *</label>
+            <input type="tel" class="f-contacts" placeholder="+225 XX XX XX XX" onchange="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label>Nom de l'enquêteur / Représentant DCEP</label>
+            <input type="text" id="nomEnqueteur" placeholder="Nom et prénom">
+          </div>
+          <div class="form-group">
+            <label>Entreprise de construction</label>
+            <input type="text" class="f-entreprise" placeholder="Raison sociale">
+          </div>
+          <div class="form-group">
+            <label>Représentant de l'entreprise</label>
+            <input type="text" class="f-rep-entreprise" placeholder="Nom et prénom">
+          </div>
+          <div class="form-group">
+            <label>Localité / Village</label>
+            <input type="text" class="f-localite" placeholder="Localité">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: CONSTATS -->
+  <div id="tab-constats" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔍</div>
+        <div>
+          <div class="card-title">Constats des malfaçons et non-conformités</div>
+          <div class="card-subtitle">Pour chaque constat, indiquer OUI ou NON. Si OUI, décrire la malfaçon.</div>
+        </div>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div class="status-summary" style="padding: 16px 20px 0;">
+          <div class="status-badge badge-issue">🔴 <span id="countIssues">0</span> malfaçon(s) constatée(s)</div>
+          <div class="status-badge badge-ok">🟢 <span id="countOk">0</span> conforme(s)</div>
+          <div class="status-badge badge-pending">⚪ <span id="countPending">13</span> en attente</div>
+        </div>
+        <table class="constats-table">
+          <thead>
+            <tr>
+              <th style="width:44px">N°</th>
+              <th>Constat / Malfaçon</th>
+              <th style="width:90px; text-align:center;">Réponse</th>
+              <th>Description technique (si OUI)</th>
+            </tr>
+          </thead>
+          <tbody id="constatsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AUTRES CONSTATS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">➕</div>
+        <div>
+          <div class="card-title">Autres constats observés</div>
+          <div class="card-subtitle">Malfaçons non listées ci-dessus</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="autresConstats"></div>
+        <button class="btn-add" onclick="addAutreConstat()">+ Ajouter un autre constat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: OBSERVATIONS -->
+  <div id="tab-observations" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📝</div>
+        <div>
+          <div class="card-title">Observations complémentaires</div>
+          <div class="card-subtitle">Remarques générales sur l'état de l'établissement</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Observations générales</label>
+          <textarea class="f-observations" rows="5" placeholder="État général du site, conditions d'accès, présence des élèves, fonctionnement..."></textarea>
+        </div>
+        <div class="form-grid" style="margin-top:16px;">
+          <div class="form-group">
+            <label>État global des ouvrages</label>
+            <select class="f-etat-global">
+              <option value="">Sélectionner...</option>
+              <option>Bon état général</option>
+              <option>État moyen — réserves mineures</option>
+              <option>État dégradé — réserves importantes</option>
+              <option>État critique — travaux urgents requis</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Fonctionnalité de l'établissement</label>
+            <select class="f-fonctionnalite">
+              <option value="">Sélectionner...</option>
+              <option>Pleinement fonctionnel</option>
+              <option>Partiellement fonctionnel</option>
+              <option>Non fonctionnel</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:16px;">
+          <label>Recommandations opérationnelles</label>
+          <textarea class="f-recommandations" rows="4" placeholder="Actions correctives à engager, délais suggérés, priorités..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: RÉSERVES -->
+  <div id="tab-reserves" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">⚠️</div>
+        <div>
+          <div class="card-title">Suivi des réserves contractuelles</div>
+          <div class="card-subtitle">Réserves à notifier formellement à l'entreprise</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="reservesList"></div>
+        <button class="btn-add" onclick="addReserve()" style="margin-top:12px;">+ Ajouter une réserve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: SIGNATURES -->
+  <div id="tab-signatures" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✍️</div>
+        <div>
+          <div class="card-title">Signatures des parties</div>
+          <div class="card-subtitle">Les soussignés certifient l'exactitude des constats</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="sig-grid">
+          <div class="sig-box">
+            <div class="sig-box-header">Représentant DCEP / MENAET</div>
+            <div class="sig-box-body">
+              <div class="form-group">
+                <label>Nom & Prénom</label>
+                <input type="text" id="sig1Name" placeholder="Nom complet">
+              </div>
+              <div class="form-group">
+                <label>Fonction</label>
+                <input type="text" id="sig1Titre" placeholder="ex: Ingénieur DCEP">
+              </div>
+              <div class="sig-line">Signature :</div>
+            </div>
+          </div>
+          <div class="sig-box">
+            <div class="sig-box-header">Chef d'Établissement</div>
+            <div class="sig-box-body">
+              <div class="form-group">
+                <label>Nom & Prénom</label>
+                <input type="text" id="sig2Name" placeholder="Nom complet">
+              </div>
+              <div class="form-group">
+                <label>Établissement</label>
+                <input type="text" id="sig2Etab" placeholder="Nom du collège">
+              </div>
+              <div class="sig-line">Signature :</div>
+            </div>
+          </div>
+          <div class="sig-box">
+            <div class="sig-box-header">Représentant Entreprise</div>
+            <div class="sig-box-body">
+              <div class="form-group">
+                <label>Nom & Prénom</label>
+                <input type="text" id="sig3Name" placeholder="Nom complet">
+              </div>
+              <div class="form-group">
+                <label>Entreprise</label>
+                <input type="text" id="sig3Entreprise" placeholder="Raison sociale">
+              </div>
+              <div class="sig-line">Signature :</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RÉSUMÉ FINAL -->
+        <div style="margin-top:24px;">
+          <div class="card-header" style="border-radius:10px 10px 0 0; margin:-1px;">
+            <div class="card-icon">📊</div>
+            <div class="card-title">Récapitulatif du rapport</div>
+          </div>
+          <div style="background: var(--cream); border-radius: 0 0 10px 10px; padding: 20px; border: 1px solid var(--border); border-top: none;">
+            <div class="summary-grid" id="summaryGrid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- GENERATE BAR -->
+<div class="generate-bar">
+  <div class="generate-info">
+    <strong id="genInfoEtab">0 établissement(s)</strong> · 
+    <strong id="genInfoMalfacons">0 malfaçon(s)</strong> constatée(s) · 
+    <span id="genInfoDate">–</span>
+  </div>
+  <button class="btn-generate" onclick="generateReport()">
+    📄 Générer le Rapport Word
+  </button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════════
+const CONSTATS_LIST = [
+  { id: 'etancheite',           label: "Problème d'étanchéité (toiture ou mur)",                          cat: 'Gros œuvre' },
+  { id: 'fissures',             label: "Présence de fissures (bâtiment, clôture, plancher)",               cat: 'Gros œuvre' },
+  { id: 'construction_inach',   label: "Construction inachevée",                                            cat: 'Gros œuvre' },
+  { id: 'plafond_porte',        label: "Plafond, portes ou tables-bancs endommagés",                       cat: 'Second œuvre' },
+  { id: 'splits',               label: "Climatiseurs (splits) inexistants ou défaillants",                 cat: 'Équipements' },
+  { id: 'inondation',           label: "Inondation constatée (cour, classes, bureaux, toilettes, terrain)",cat: 'VRD' },
+  { id: 'serrures',             label: "Serrures défaillantes (portes ou portails)",                       cat: 'Second œuvre' },
+  { id: 'gazon',                label: "Gazon ou pelouse inexistant",                                      cat: 'Aménagements' },
+  { id: 'vitres',               label: "Vitres défaillantes",                                              cat: 'Second œuvre' },
+  { id: 'caniveau',             label: "Caniveaux mal construits ou inexistants",                          cat: 'VRD' },
+  { id: 'chateau_eau',          label: "Château d'eau défaillant",                                         cat: 'Équipements' },
+  { id: 'absence_mobilier',     label: "Absence de mobiliers",                                             cat: 'Équipements' },
+  { id: 'absence_eau',          label: "Absence d'eau",                                                    cat: 'Équipements' },
+];
+
+// State: array of établissements
+let etabs = [createEtab()];
+let currentEtab = 0;
+let autresConstats = []; // global autres constats for current etab
+let reserves = [];
+let autresCounters = {};
+let reserveCounters = {};
+
+function createEtab() {
+  return {
+    college: '',
+    base: '',
+    chef: '',
+    contacts: '',
+    entreprise: '',
+    repEntreprise: '',
+    localite: '',
+    etatGlobal: '',
+    fonctionnalite: '',
+    observations: '',
+    recommandations: '',
+    constats: {},
+    autresConstats: [],
+    reserves: [],
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════════════════
+let currentTab = 'identification';
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+  currentTab = tab;
+  if (tab === 'signatures') buildSummary();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// ÉTABLISSEMENTS
+// ═══════════════════════════════════════════════════════════════════
+function addEtab() {
+  saveCurrentEtab();
+  etabs.push(createEtab());
+  currentEtab = etabs.length - 1;
+  renderEtabTabs();
+  loadEtab(currentEtab);
+}
+
+function switchEtab(idx) {
+  saveCurrentEtab();
+  currentEtab = idx;
+  renderEtabTabs();
+  loadEtab(idx);
+}
+
+function renderEtabTabs() {
+  const container = document.getElementById('etabTabs');
+  let html = '';
+  etabs.forEach((e, i) => {
+    const name = e.college || `Établissement ${i+1}`;
+    const active = i === currentEtab ? 'active' : '';
+    html += `<div class="etab-tab ${active}" data-etab="${i}" onclick="switchEtab(${i})">
+      <div class="etab-dot"></div><span>${name}</span></div>`;
+  });
+  html += `<button class="btn-add-etab" onclick="addEtab()">＋ Ajouter un établissement</button>`;
+  container.innerHTML = html;
+  document.getElementById('nbEtab').textContent = etabs.length;
+}
+
+function saveCurrentEtab() {
+  const e = etabs[currentEtab];
+  const college = document.querySelector('.f-college');
+  if (college) e.college = college.value;
+  const base = document.querySelector('.f-base');
+  if (base) e.base = base.value;
+  const chef = document.querySelector('.f-chef');
+  if (chef) e.chef = chef.value;
+  const contacts = document.querySelector('.f-contacts');
+  if (contacts) e.contacts = contacts.value;
+  const ent = document.querySelector('.f-entreprise');
+  if (ent) e.entreprise = ent.value;
+  const rep = document.querySelector('.f-rep-entreprise');
+  if (rep) e.repEntreprise = rep.value;
+  const loc = document.querySelector('.f-localite');
+  if (loc) e.localite = loc.value;
+  const obs = document.querySelector('.f-observations');
+  if (obs) e.observations = obs.value;
+  const rec = document.querySelector('.f-recommandations');
+  if (rec) e.recommandations = rec.value;
+  const eg = document.querySelector('.f-etat-global');
+  if (eg) e.etatGlobal = eg.value;
+  const fn = document.querySelector('.f-fonctionnalite');
+  if (fn) e.fonctionnalite = fn.value;
+
+  // Save constats
+  CONSTATS_LIST.forEach(c => {
+    const oui = document.getElementById(`oui_${c.id}_${currentEtab}`);
+    const non = document.getElementById(`non_${c.id}_${currentEtab}`);
+    const desc = document.getElementById(`desc_${c.id}_${currentEtab}`);
+    if (oui && non) {
+      e.constats[c.id] = {
+        reponse: oui.checked ? 'OUI' : (non.checked ? 'NON' : ''),
+        description: desc ? desc.value : ''
+      };
+    }
+  });
+
+  // Save autres constats
+  e.autresConstats = [];
+  document.querySelectorAll('.autre-constat-desc').forEach(el => {
+    e.autresConstats.push(el.value);
+  });
+
+  // Save reserves
+  e.reserves = [];
+  document.querySelectorAll('.reserve-row').forEach(el => {
+    e.reserves.push({
+      desc: el.querySelector('.r-desc').value,
+      delai: el.querySelector('.r-delai').value,
+      statut: el.querySelector('.r-statut').value,
+    });
+  });
+}
+
+function loadEtab(idx) {
+  const e = etabs[idx];
+  document.getElementById('etabLabel').textContent = idx + 1;
+
+  // Identification fields
+  document.querySelector('.f-college').value = e.college || '';
+  document.querySelector('.f-base').value = e.base || '';
+  document.querySelector('.f-chef').value = e.chef || '';
+  document.querySelector('.f-contacts').value = e.contacts || '';
+  document.querySelector('.f-entreprise').value = e.entreprise || '';
+  document.querySelector('.f-rep-entreprise').value = e.repEntreprise || '';
+  document.querySelector('.f-localite').value = e.localite || '';
+  document.querySelector('.f-observations').value = e.observations || '';
+  document.querySelector('.f-recommandations').value = e.recommandations || '';
+  const eg = document.querySelector('.f-etat-global');
+  if (eg) eg.value = e.etatGlobal || '';
+  const fn = document.querySelector('.f-fonctionnalite');
+  if (fn) fn.value = e.fonctionnalite || '';
+
+  // Render constats
+  renderConstats(idx);
+
+  // Render autres constats
+  const ac = document.getElementById('autresConstats');
+  ac.innerHTML = '';
+  (e.autresConstats || []).forEach((desc, i) => {
+    addAutreConstat(desc);
+  });
+
+  // Render reserves
+  const rl = document.getElementById('reservesList');
+  rl.innerHTML = '';
+  (e.reserves || []).forEach(r => addReserve(r));
+
+  updateProgress();
+  updateCounters();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CONSTATS
+// ═══════════════════════════════════════════════════════════════════
+function renderConstats(etabIdx) {
+  const e = etabs[etabIdx];
+  const tbody = document.getElementById('constatsBody');
+  tbody.innerHTML = '';
+  CONSTATS_LIST.forEach((c, i) => {
+    const saved = (e.constats && e.constats[c.id]) || {};
+    const isOui = saved.reponse === 'OUI';
+    const isNon = saved.reponse === 'NON';
+    const desc = saved.description || '';
+    const tr = document.createElement('tr');
+    tr.id = `row_${c.id}_${etabIdx}`;
+    if (isOui) tr.classList.add('has-issue');
+    tr.innerHTML = `
+      <td class="constat-num">${i+1}</td>
+      <td class="constat-label">${c.label}<small>${c.cat}</small></td>
+      <td>
+        <div class="toggle-group">
+          <div class="toggle-oui">
+            <input type="radio" name="c_${c.id}_${etabIdx}" id="oui_${c.id}_${etabIdx}" value="OUI" ${isOui?'checked':''} onchange="onConstatChange('${c.id}', ${etabIdx})">
+            <label for="oui_${c.id}_${etabIdx}">OUI</label>
+          </div>
+          <div class="toggle-non">
+            <input type="radio" name="c_${c.id}_${etabIdx}" id="non_${c.id}_${etabIdx}" value="NON" ${isNon?'checked':''} onchange="onConstatChange('${c.id}', ${etabIdx})">
+            <label for="non_${c.id}_${etabIdx}">NON</label>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="desc-expand ${isOui?'open':''}" id="descExpand_${c.id}_${etabIdx}">
+          <textarea id="desc_${c.id}_${etabIdx}" placeholder="Décrire la malfaçon observée...">${desc}</textarea>
+        </div>
+        ${!isOui ? '<span style="color:#9CA3AF;font-size:13px;">—</span>' : ''}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  updateCounters();
+}
+
+function onConstatChange(id, etabIdx) {
+  const oui = document.getElementById(`oui_${id}_${etabIdx}`);
+  const expand = document.getElementById(`descExpand_${id}_${etabIdx}`);
+  const row = document.getElementById(`row_${id}_${etabIdx}`);
+  const isOui = oui && oui.checked;
+  if (expand) {
+    expand.classList.toggle('open', isOui);
+    // Show/hide placeholder
+    const td = expand.parentElement;
+    const span = td.querySelector('span');
+    if (isOui && span) span.remove();
+    if (!isOui) {
+      expand.insertAdjacentHTML('afterend', '<span style="color:#9CA3AF;font-size:13px;">—</span>');
+    }
+  }
+  if (row) row.classList.toggle('has-issue', isOui);
+  updateCounters();
+  updateProgress();
+}
+
+function updateCounters() {
+  let issues = 0, ok = 0, pending = 0;
+  CONSTATS_LIST.forEach(c => {
+    const oui = document.getElementById(`oui_${c.id}_${currentEtab}`);
+    const non = document.getElementById(`non_${c.id}_${currentEtab}`);
+    if (oui && oui.checked) issues++;
+    else if (non && non.checked) ok++;
+    else pending++;
+  });
+  document.getElementById('countIssues').textContent = issues;
+  document.getElementById('countOk').textContent = ok;
+  document.getElementById('countPending').textContent = pending;
+  document.getElementById('tabConstatsNum').textContent = issues;
+
+  // Update generate bar
+  document.getElementById('genInfoMalfacons').textContent = issues + ' malfaçon(s)';
+  document.getElementById('genInfoEtab').textContent = etabs.length + ' établissement(s)';
+  const d = document.getElementById('dateVisite').value;
+  document.getElementById('genInfoDate').textContent = d ? new Date(d).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}) : '–';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// AUTRES CONSTATS
+// ═══════════════════════════════════════════════════════════════════
+let autreIdx = 0;
+function addAutreConstat(val = '') {
+  const container = document.getElementById('autresConstats');
+  const i = autreIdx++;
+  const div = document.createElement('div');
+  div.className = 'autres-row';
+  div.id = `autre_${i}`;
+  div.innerHTML = `
+    <div class="autres-header">
+      <div class="autres-title">Constat additionnel ${container.children.length + 1}</div>
+      <button class="btn-remove" onclick="removeAutre('autre_${i}')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Description du constat</label>
+      <textarea class="autre-constat-desc" placeholder="Décrire le constat observé...">${val}</textarea>
+    </div>
+    <div class="form-group" style="margin-top:10px;">
+      <label>📷 Référence(s) photo</label>
+      <input type="text" placeholder="ex: Photo_A1_Akadiafoue_01.jpg">
+    </div>`;
+  container.appendChild(div);
+}
+function removeAutre(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RÉSERVES
+// ═══════════════════════════════════════════════════════════════════
+let reserveIdx = 0;
+function addReserve(data = {}) {
+  const container = document.getElementById('reservesList');
+  const i = reserveIdx++;
+  const div = document.createElement('div');
+  div.className = 'autres-row reserve-row';
+  div.id = `res_${i}`;
+  const n = container.children.length + 1;
+  div.innerHTML = `
+    <div class="autres-header">
+      <div class="autres-title">Réserve R${n}</div>
+      <button class="btn-remove" onclick="document.getElementById('res_${i}').remove(); updateReserveCount()">✕</button>
+    </div>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="form-group full" style="grid-column:1/3;">
+        <label>Description de la réserve</label>
+        <textarea class="r-desc" placeholder="Décrire précisément la réserve contractuelle...">${data.desc||''}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Délai de levée</label>
+        <input type="text" class="r-delai" placeholder="ex: 30 jours" value="${data.delai||''}">
+      </div>
+      <div class="form-group">
+        <label>Statut</label>
+        <select class="r-statut">
+          <option value="">Sélectionner...</option>
+          <option ${data.statut==='En cours'?'selected':''}>En cours</option>
+          <option ${data.statut==='Levée'?'selected':''}>Levée</option>
+          <option ${data.statut==='Non engagée'?'selected':''}>Non engagée</option>
+        </select>
+      </div>
+    </div>`;
+  container.appendChild(div);
+  updateReserveCount();
+}
+function updateReserveCount() {
+  const n = document.querySelectorAll('.reserve-row').length;
+  document.getElementById('tabReservesNum').textContent = n;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════════════════════════════
+function updateProgress() {
+  const fields = [
+    document.getElementById('dateVisite')?.value,
+    document.querySelector('input[name="drena"]:checked')?.value,
+    document.querySelector('.f-college')?.value,
+    document.querySelector('.f-chef')?.value,
+    document.querySelector('.f-contacts')?.value,
+  ];
+  const filled = fields.filter(f => f && f.trim()).length;
+  const pct = Math.round((filled / fields.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  updateEtabLabel();
+}
+
+function updateEtabLabel() {
+  const college = document.querySelector('.f-college')?.value;
+  if (college) etabs[currentEtab].college = college;
+  renderEtabTabs();
+}
+
+function buildSummary() {
+  saveCurrentEtab();
+  let totalIssues = 0;
+  let totalReserves = 0;
+  etabs.forEach(e => {
+    Object.values(e.constats || {}).forEach(c => { if (c.reponse === 'OUI') totalIssues++; });
+    totalReserves += (e.reserves || []).length;
+  });
+  const grid = document.getElementById('summaryGrid');
+  const d = document.getElementById('dateVisite').value;
+  const dateStr = d ? new Date(d).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}) : '—';
+  const drena = document.querySelector('input[name="drena"]:checked')?.value || '—';
+  grid.innerHTML = `
+    <div class="summary-item"><div class="s-label">Date</div><div class="s-value">${dateStr}</div></div>
+    <div class="summary-item"><div class="s-label">DRENA</div><div class="s-value">${drena}</div></div>
+    <div class="summary-item"><div class="s-label">Établissements</div><div class="s-value">${etabs.length}</div></div>
+    <div class="summary-item"><div class="s-label">Malfaçons constatées</div><div class="s-value" style="color:var(--red)">${totalIssues}</div></div>
+    <div class="summary-item"><div class="s-label">Réserves</div><div class="s-value">${totalReserves}</div></div>
+    <div class="summary-item"><div class="s-label">Enquêteur</div><div class="s-value" style="font-size:13px;">${document.getElementById('nomEnqueteur').value || '—'}</div></div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// WORD GENERATION
+// ═══════════════════════════════════════════════════════════════════
+async function generateReport() {
+  saveCurrentEtab();
+
+  const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+          Header, Footer, AlignmentType, HeadingLevel, BorderStyle, WidthType,
+          ShadingType, VerticalAlign, TabStopType } = docx;
+
+  const BLUE_DARK = '1F3864';
+  const BLUE_MED  = '2E75B6';
+  const BLUE_LIGHT= 'D6E4F0';
+  const GOLD      = 'C9913A';
+  const GREY      = 'F2F2F2';
+  const RED       = 'C0392B';
+  const GREEN_C   = '1A7A3A';
+  const WHITE     = 'FFFFFF';
+
+  const bdr = (color='AAAAAA') => ({ style: BorderStyle.SINGLE, size: 1, color });
+  const bdrs = (c='AAAAAA') => ({ top: bdr(c), bottom: bdr(c), left: bdr(c), right: bdr(c) });
+  const noBdr = () => ({ style: BorderStyle.NONE, size: 0, color: 'FFFFFF' });
+  const noBdrs = () => ({ top: noBdr(), bottom: noBdr(), left: noBdr(), right: noBdr() });
+
+  const p = (text, opts={}) => new Paragraph({
+    alignment: opts.align || AlignmentType.LEFT,
+    spacing: opts.spacing || { before: 40, after: 40 },
+    children: [new TextRun({ text: text||'', font: 'Arial', size: opts.size||20,
+      bold: opts.bold||false, italics: opts.italic||false, color: opts.color||'000000' })]
+  });
+
+  const tc = (children, opts={}) => new TableCell({
+    borders: opts.borders || bdrs(opts.bc || 'BBBBBB'),
+    width: opts.w ? { size: opts.w, type: WidthType.DXA } : undefined,
+    shading: opts.fill ? { fill: opts.fill, type: ShadingType.CLEAR } : undefined,
+    verticalAlign: opts.va || VerticalAlign.CENTER,
+    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+    columnSpan: opts.cs || 1,
+    children: Array.isArray(children) ? children : [children],
+  });
+
+  const blank = () => p('');
+
+  const globalDate = document.getElementById('dateVisite').value;
+  const dateDisplay = globalDate ? new Date(globalDate + 'T00:00:00').toLocaleDateString('fr-FR', {weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '_______________';
+  const drena = document.querySelector('input[name="drena"]:checked')?.value || '_______________';
+  const enqueteur = document.getElementById('nomEnqueteur').value || '_______________';
+  const numRapport = document.getElementById('numRapport').value || '___/2026';
+
+  const sections = [];
+
+  // ── For each établissement, generate a section ──
+  etabs.forEach((etab, etabIdx) => {
+    const isLast = etabIdx === etabs.length - 1;
+    const college = etab.college || `Établissement ${etabIdx+1}`;
+    const chef = etab.chef || '_______________';
+    const contacts = etab.contacts || '_______________';
+    const entreprise = etab.entreprise || '_______________';
+    const repEntreprise = etab.repEntreprise || '_______________';
+    const localite = etab.localite || '_______________';
+
+    // Count issues
+    const issues = Object.values(etab.constats||{}).filter(c => c.reponse === 'OUI');
+    const constOk = Object.values(etab.constats||{}).filter(c => c.reponse === 'NON');
+
+    const children = [
+
+      // ── TITLE BLOCK ──
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [9360],
+        rows: [new TableRow({ children: [tc([
+          p('MINISTÈRE DE L\'ÉDUCATION NATIONALE, DE L\'ALPHABÉTISATION ET DE L\'ENSEIGNEMENT TECHNIQUE', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }),
+          p('Direction de la Coordination et de l\'Exécution des Projets (DCEP)', { size: 16, italic: true, color: 'C8DDF5', align: AlignmentType.CENTER }),
+          blank(),
+          p('RAPPORT JOURNALIER DE VISITE TECHNIQUE', { bold: true, size: 30, color: WHITE, align: AlignmentType.CENTER }),
+          p('FICHE DE VISITE TECHNIQUE PRÉALABLE À LA RÉCEPTION DÉFINITIVE DES CDP', { bold: true, size: 22, color: 'C8DDF5', align: AlignmentType.CENTER }),
+          p('DU PROJET COMPÉTENCES – MCA-CI', { bold: true, size: 22, color: GOLD, align: AlignmentType.CENTER }),
+          blank(),
+          p(`Date : ${dateDisplay}   ·   N° Rapport : ${numRapport}   ·   DRENA : ${drena}`, { size: 18, color: 'C8DDF5', align: AlignmentType.CENTER }),
+          p(`Enquêteur / Représentant DCEP : ${enqueteur}`, { size: 18, italic: true, color: 'C8DDF5', align: AlignmentType.CENTER }),
+        ], { fill: BLUE_DARK, borders: noBdrs() })]})],
+      }),
+      blank(),
+
+      // ── SECTION HEADER ──
+      ...(etabs.length > 1 ? [p(`Établissement ${etabIdx + 1} / ${etabs.length}`, { bold: true, size: 22, color: BLUE_MED }), blank()] : []),
+
+      // ── I. IDENTIFICATION ──
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [9360],
+        rows: [new TableRow({ children: [tc(p('I. IDENTIFICATION DE LA VISITE', { bold: true, size: 22, color: WHITE }), { fill: BLUE_MED, bc: BLUE_MED })] })]
+      }),
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [2400, 4560, 2400],
+        rows: [
+          new TableRow({ children: [
+            tc(p('Collège visité :', { bold: true, size: 20 }), { w: 2400, fill: BLUE_LIGHT }),
+            tc(p(college, { size: 20, bold: true }), { w: 4560 }),
+            tc(p('Base : ' + (etab.base || '—'), { size: 20 }), { w: 2400, fill: GREY }),
+          ]}),
+          new TableRow({ children: [
+            tc(p('Localité :', { bold: true, size: 20 }), { w: 2400, fill: BLUE_LIGHT }),
+            tc(p(localite, { size: 20 }), { w: 4560 }),
+            tc(p('DRENA : ' + drena, { size: 20 }), { w: 2400, fill: GREY }),
+          ]}),
+          new TableRow({ children: [
+            tc(p('Chef d\'Établissement :', { bold: true, size: 20 }), { w: 2400, fill: BLUE_LIGHT }),
+            tc(p(chef, { size: 20 }), { w: 4560 }),
+            tc(p('Contacts : ' + contacts, { size: 20 }), { w: 2400, fill: GREY }),
+          ]}),
+          new TableRow({ children: [
+            tc(p('Entreprise :', { bold: true, size: 20 }), { w: 2400, fill: BLUE_LIGHT }),
+            tc(p(entreprise, { size: 20 }), { w: 4560 }),
+            tc(p('Représentant : ' + repEntreprise, { size: 20 }), { w: 2400, fill: GREY }),
+          ]}),
+        ]
+      }),
+      blank(),
+
+      // ── II. CONSTATS ──
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [9360],
+        rows: [new TableRow({ children: [tc([
+          p(`II. CONSTATS DES MALFAÇONS ET NON-CONFORMITÉS`, { bold: true, size: 22, color: WHITE }),
+          p(`${issues.length} malfaçon(s) constatée(s) · ${constOk.length} conforme(s)`, { size: 18, italic: true, color: 'C8DDF5' }),
+        ], { fill: BLUE_MED, bc: BLUE_MED })] })]
+      }),
+
+      // Constats table header
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [360, 3200, 500, 500, 4800],
+        rows: [
+          new TableRow({
+            tableHeader: true,
+            children: [
+              tc(p('N°', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_DARK }),
+              tc(p('CONSTAT / MALFAÇON', { bold: true, size: 18, color: WHITE }), { fill: BLUE_DARK }),
+              tc(p('OUI', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_DARK }),
+              tc(p('NON', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_DARK }),
+              tc(p('DESCRIPTION TECHNIQUE', { bold: true, size: 18, color: WHITE }), { fill: BLUE_DARK }),
+            ]
+          }),
+          ...CONSTATS_LIST.map((c, i) => {
+            const saved = (etab.constats || {})[c.id] || {};
+            const isOui = saved.reponse === 'OUI';
+            const isNon = saved.reponse === 'NON';
+            const fill = isOui ? 'FFF0F0' : (isNon ? 'F0FFF4' : (i%2===0?'FFFFFF':GREY));
+            return new TableRow({ children: [
+              tc(p(String(i+1), { size: 18, align: AlignmentType.CENTER, bold: true, color: BLUE_MED }), { fill }),
+              tc([p(c.label, { size: 18 }), p(c.cat, { size: 16, italic: true, color: '888888' })], { fill }),
+              tc(p(isOui ? '✔' : '', { size: 20, align: AlignmentType.CENTER, bold: true, color: RED }), { fill }),
+              tc(p(isNon ? '✔' : '', { size: 20, align: AlignmentType.CENTER, bold: true, color: GREEN_C }), { fill }),
+              tc(p(isOui ? (saved.description || '(pas de description)') : (isNon ? 'Conforme' : '(non renseigné)'), { size: 18, italic: !isOui && !isNon, color: isOui ? RED : (isNon ? GREEN_C : '999999') }), { fill }),
+            ]});
+          }),
+        ]
+      }),
+      blank(),
+
+      // Autres constats
+      ...((etab.autresConstats||[]).length > 0 ? [
+        new Table({
+          width: { size: 9360, type: WidthType.DXA },
+          columnWidths: [9360],
+          rows: [new TableRow({ children: [tc(p('AUTRES CONSTATS OBSERVÉS', { bold: true, size: 20, color: WHITE }), { fill: BLUE_MED, bc: BLUE_MED })] })]
+        }),
+        new Table({
+          width: { size: 9360, type: WidthType.DXA },
+          columnWidths: [360, 9000],
+          rows: (etab.autresConstats||[]).map((desc, i) => new TableRow({ children: [
+            tc(p(`A${i+1}`, { size: 18, bold: true, color: BLUE_MED, align: AlignmentType.CENTER }), { fill: BLUE_LIGHT }),
+            tc(p(desc || '(pas de description)', { size: 18 })),
+          ]}))
+        }),
+        blank(),
+      ] : []),
+
+      // ── III. OBSERVATIONS ──
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [9360],
+        rows: [new TableRow({ children: [tc(p('III. OBSERVATIONS ET RECOMMANDATIONS', { bold: true, size: 22, color: WHITE }), { fill: BLUE_MED, bc: BLUE_MED })] })]
+      }),
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [2400, 6960],
+        rows: [
+          new TableRow({ children: [
+            tc(p('État global :', { bold: true, size: 20 }), { fill: BLUE_LIGHT }),
+            tc(p(etab.etatGlobal || '_______________', { size: 20 })),
+          ]}),
+          new TableRow({ children: [
+            tc(p('Fonctionnalité :', { bold: true, size: 20 }), { fill: BLUE_LIGHT }),
+            tc(p(etab.fonctionnalite || '_______________', { size: 20 })),
+          ]}),
+          new TableRow({ children: [
+            tc(p('Observations :', { bold: true, size: 20 }), { fill: BLUE_LIGHT }),
+            tc(p(etab.observations || '(aucune observation)', { size: 20 })),
+          ]}),
+          new TableRow({ children: [
+            tc(p('Recommandations :', { bold: true, size: 20 }), { fill: BLUE_LIGHT }),
+            tc(p(etab.recommandations || '(aucune recommandation)', { size: 20 })),
+          ]}),
+        ]
+      }),
+      blank(),
+
+      // ── IV. RÉSERVES ──
+      ...((etab.reserves||[]).length > 0 ? [
+        new Table({
+          width: { size: 9360, type: WidthType.DXA },
+          columnWidths: [9360],
+          rows: [new TableRow({ children: [tc(p('IV. SUIVI DES RÉSERVES CONTRACTUELLES', { bold: true, size: 22, color: WHITE }), { fill: BLUE_MED, bc: BLUE_MED })] })]
+        }),
+        new Table({
+          width: { size: 9360, type: WidthType.DXA },
+          columnWidths: [400, 5560, 1600, 1800],
+          rows: [
+            new TableRow({ tableHeader: true, children: [
+              tc(p('N°', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_DARK }),
+              tc(p('Description', { bold: true, size: 18, color: WHITE }), { fill: BLUE_DARK }),
+              tc(p('Délai levée', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_DARK }),
+              tc(p('Statut', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_DARK }),
+            ]}),
+            ...(etab.reserves||[]).map((r, i) => new TableRow({ children: [
+              tc(p(`R${i+1}`, { size: 18, bold: true, color: BLUE_MED, align: AlignmentType.CENTER }), { fill: i%2===0?'FFFFFF':GREY }),
+              tc(p(r.desc || '___', { size: 18 }), { fill: i%2===0?'FFFFFF':GREY }),
+              tc(p(r.delai || '___', { size: 18, align: AlignmentType.CENTER }), { fill: i%2===0?'FFFFFF':GREY }),
+              tc(p(r.statut || '___', { size: 18, align: AlignmentType.CENTER, bold: true,
+                color: r.statut==='Levée'?GREEN_C:(r.statut==='En cours'?GOLD:RED) }), { fill: i%2===0?'FFFFFF':GREY }),
+            ]}))
+          ]
+        }),
+        blank(),
+      ] : []),
+
+      // ── V. SIGNATURES ──
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [9360],
+        rows: [new TableRow({ children: [tc(p('V. SIGNATURES DES PARTIES', { bold: true, size: 22, color: WHITE }), { fill: BLUE_MED, bc: BLUE_MED })] })]
+      }),
+      p('Les soussignés certifient l\'exactitude des constats consignés dans le présent rapport.', { size: 18, italic: true }),
+      blank(),
+      new Table({
+        width: { size: 9360, type: WidthType.DXA },
+        columnWidths: [3120, 3120, 3120],
+        rows: [
+          new TableRow({ children: [
+            tc(p('Représentant DCEP / MENAET', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_MED, bc: BLUE_MED }),
+            tc(p('Chef d\'Établissement', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_MED, bc: BLUE_MED }),
+            tc(p('Représentant Entreprise', { bold: true, size: 18, color: WHITE, align: AlignmentType.CENTER }), { fill: BLUE_MED, bc: BLUE_MED }),
+          ]}),
+          new TableRow({ children: [
+            tc([
+              p(document.getElementById('sig1Name').value || '_______________', { size: 18 }),
+              p(document.getElementById('sig1Titre').value || '', { size: 16, italic: true, color: '666666' }),
+              p(''), p(''), p(''), p('Signature :'),
+            ], { w: 3120 }),
+            tc([
+              p(chef, { size: 18 }),
+              p(document.getElementById('sig2Etab').value || college, { size: 16, italic: true, color: '666666' }),
+              p(''), p(''), p(''), p('Signature :'),
+            ], { w: 3120 }),
+            tc([
+              p(document.getElementById('sig3Name').value || '_______________', { size: 18 }),
+              p(entreprise, { size: 16, italic: true, color: '666666' }),
+              p(''), p(''), p(''), p('Signature :'),
+            ], { w: 3120 }),
+          ]}),
+        ]
+      }),
+    ];
+
+    sections.push({
+      properties: {
+        page: {
+          size: { width: 15840, height: 12240 },
+          margin: { top: 720, right: 720, bottom: 900, left: 720 }
+        }
+      },
+      headers: {
+        default: new Header({ children: [
+          new Table({
+            width: { size: 13680, type: WidthType.DXA },
+            columnWidths: [8000, 5680],
+            rows: [new TableRow({ children: [
+              tc([
+                p('MINISTÈRE DE L\'ÉDUCATION NATIONALE, DE L\'ALPHABÉTISATION ET DE L\'ENSEIGNEMENT TECHNIQUE', { bold: true, size: 16, color: BLUE_DARK }),
+                p('Direction de la Coordination et de l\'Exécution des Projets (DCEP)', { size: 14, italic: true, color: '666666' }),
+              ], { borders: noBdrs() }),
+              tc([
+                p('PROJET COMPÉTENCES – MCA-CI', { bold: true, size: 16, color: GOLD, align: AlignmentType.RIGHT }),
+                p(`Rapport N° ${numRapport}  ·  ${dateDisplay}`, { size: 14, italic: true, color: '888888', align: AlignmentType.RIGHT }),
+              ], { borders: noBdrs() }),
+            ]})]
+          }),
+          new Paragraph({ border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: BLUE_MED, space: 1 } }, children: [new TextRun('')] }),
+        ]})
+      },
+      footers: {
+        default: new Footer({ children: [
+          new Paragraph({
+            border: { top: { style: BorderStyle.SINGLE, size: 4, color: BLUE_MED, space: 1 } },
+            children: [new TextRun({ text: `DCEP/MENAET – Mission terrain CDP Bouaké · ${college} · Document contradictoire confidentiel`, font: 'Arial', size: 16, color: '888888', italics: true })]
+          })
+        ]})
+      },
+      children,
+    });
+  });
+
+  const doc = new Document({
+    styles: { default: { document: { run: { font: 'Arial', size: 20 } } } },
+    sections,
+  });
+
+  const buffer = await Packer.toBuffer(doc);
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = document.getElementById('dateVisite').value || '2026';
+  a.href = url;
+  a.download = `Rapport_Visite_CDP_${d.replace(/-/g,'')}_${etabs.map(e=>e.college||'Etab').join('_').replace(/\s+/g,'_').substring(0,40)}.docx`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderConstats(0);
+  document.getElementById('dateVisite').valueAsDate = new Date();
+  updateProgress();
+  updateCounters();
+  // Auto-set today date
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('dateVisite').value = today;
+});
+</script>
+</body>
+</html>
